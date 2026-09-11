@@ -1,6 +1,6 @@
-using Winterflood.Bookings.Domain.Enum;
+using Winterflood.Bookings.Domain.Enums;
 
-namespace Winterflood.Bookings.API.Models.Requests;
+namespace Winterflood.Bookings.Application.Models.Requests;
 
 public sealed class CreateBookingRequest
 {

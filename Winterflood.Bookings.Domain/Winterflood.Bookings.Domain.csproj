@@ -7,4 +7,8 @@
 	<RootNamespace>Winterflood.Bookings.Domain</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Enum\" />
+  </ItemGroup>
+
 </Project>

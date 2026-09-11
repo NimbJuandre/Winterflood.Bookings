@@ -1,9 +1,10 @@
-using Winterflood.Bookings.API.Models.Requests;
-using Winterflood.Bookings.API.Services.Interfaces;
-using Winterflood.Bookings.Data.Repository.Interfaces;
+using Microsoft.Extensions.Logging;
+using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Services.Interfaces;
 using Winterflood.Bookings.Domain.Models;
+using Winterflood.Bookings.Domain.Repositories;
 
-namespace Winterflood.Bookings.API.Services.Implementation;
+namespace Winterflood.Bookings.Application.Services.Implementation;
 
 public sealed class BookingService(IBookingRepository repository, ILogger<BookingService> logger) : IBookingService
 {

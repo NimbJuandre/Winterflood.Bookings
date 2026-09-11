@@ -1,12 +1,14 @@
 namespace Winterflood.Bookings.Domain.Models;
 
+using Winterflood.Bookings.Domain.Enums;
+
 public sealed class Booking
 {
     public Guid Id { get; init; }
 
     public required string CustomerName { get; set; }
 
-    public Enum.BookingType BookingType { get; set; }
+    public BookingType BookingType { get; set; }
 
     public required string ItemName { get; set; }
 

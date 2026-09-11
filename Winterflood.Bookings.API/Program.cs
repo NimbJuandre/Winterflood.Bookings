@@ -1,6 +1,7 @@
 using Serilog;
 using Winterflood.Bookings.API;
 using Winterflood.Bookings.API.Middleware;
+using Winterflood.Bookings.Application;
 using Winterflood.Bookings.Data;
 using Winterflood.Bookings.Infrastructure;
 
@@ -15,6 +16,7 @@ builder.Host.UseSerilog((context, services, config) => config
 builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddDataAccess(builder.Configuration)
+    .AddApplication()
     .AddApi(builder.Configuration)
     .AddCorsPolicy(builder.Configuration, builder.Environment)
     .AddHealthChecks(builder.Configuration);

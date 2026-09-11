@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Winterflood.Bookings.Data.Repository.Implementation;
-using Winterflood.Bookings.Data.Repository.Interfaces;
+using Winterflood.Bookings.Data.Repositories;
+using Winterflood.Bookings.Domain.Repositories;
 
 namespace Winterflood.Bookings.Data;
 
@@ -12,7 +12,7 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<IBookingRepository, InMemoryBookingRepository>();
+        services.AddSingleton<IBookingRepository, BookingRepository>();
         return services;
     }
 }

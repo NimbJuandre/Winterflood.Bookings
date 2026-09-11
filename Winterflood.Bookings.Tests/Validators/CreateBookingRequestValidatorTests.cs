@@ -1,7 +1,7 @@
 using FluentValidation.TestHelper;
-using Winterflood.Bookings.API.Models.Requests;
+using Winterflood.Bookings.Application.Models.Requests;
 using Winterflood.Bookings.API.Validators;
-using Winterflood.Bookings.Domain.Enum;
+using Winterflood.Bookings.Domain.Enums;
 using Xunit;
 
 namespace Winterflood.Bookings.Tests.Validators;

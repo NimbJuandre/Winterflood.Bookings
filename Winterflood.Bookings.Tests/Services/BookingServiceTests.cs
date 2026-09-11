@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging.Abstractions;
-using Winterflood.Bookings.API.Models.Requests;
-using Winterflood.Bookings.API.Services.Implementation;
-using Winterflood.Bookings.Data.Repository.Implementation;
-using Winterflood.Bookings.Domain.Enum;
+using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Services.Implementation;
+using Winterflood.Bookings.Data.Repositories;
+using Winterflood.Bookings.Domain.Enums;
 using Xunit;
 
 namespace Winterflood.Bookings.Tests.Services;
@@ -10,7 +10,7 @@ namespace Winterflood.Bookings.Tests.Services;
 public class BookingServiceTests
 {
     private static BookingService CreateService() =>
-        new(new InMemoryBookingRepository(), NullLogger<BookingService>.Instance);
+        new(new BookingRepository(), NullLogger<BookingService>.Instance);
 
     private static CreateBookingRequest ValidCreate() => new()
     {

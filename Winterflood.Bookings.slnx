@@ -1,5 +1,6 @@
-﻿<Solution>
+<Solution>
   <Project Path="Winterflood.Bookings.Domain/Winterflood.Bookings.Domain.csproj" />
+  <Project Path="Winterflood.Bookings.Application/Winterflood.Bookings.Application.csproj" />
   <Project Path="Winterflood.Bookings.Data/Winterflood.Bookings.Data.csproj" />
   <Project Path="Winterflood.Bookings.Infrastructure/Winterflood.Bookings.Infrastructure.csproj" />
   <Project Path="Winterflood.Bookings.API/Winterflood.Bookings.API.csproj" />

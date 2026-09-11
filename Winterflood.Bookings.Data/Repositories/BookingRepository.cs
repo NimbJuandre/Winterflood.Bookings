@@ -1,15 +1,15 @@
 using System.Collections.Concurrent;
-using Winterflood.Bookings.Data.Repository.Interfaces;
 using Winterflood.Bookings.Domain.Models;
+using Winterflood.Bookings.Domain.Repositories;
 
-namespace Winterflood.Bookings.Data.Repository.Implementation;
+namespace Winterflood.Bookings.Data.Repositories;
 
 /// <summary>
 /// Thread-safe in-memory booking store.
 /// Uses <see cref="ConcurrentDictionary{TKey,TValue}"/> because the API can be hit by
 /// concurrent HTTP requests and would otherwise race on writes.
 /// </summary>
-public sealed class InMemoryBookingRepository : IBookingRepository
+public sealed class BookingRepository : IBookingRepository
 {
     private readonly ConcurrentDictionary<Guid, Booking> _bookings = new();
 

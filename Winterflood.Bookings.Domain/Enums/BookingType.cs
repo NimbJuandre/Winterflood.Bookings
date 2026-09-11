@@ -1,4 +1,4 @@
-namespace Winterflood.Bookings.Domain.Enum;
+namespace Winterflood.Bookings.Domain.Enums;
 
 /// <summary>
 /// The category of item being booked.

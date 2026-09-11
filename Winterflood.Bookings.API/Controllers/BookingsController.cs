@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Winterflood.Bookings.API.Models.Requests;
-using Winterflood.Bookings.API.Services.Interfaces;
+using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Services.Interfaces;
 using Winterflood.Bookings.Domain.Models;
 
 namespace Winterflood.Bookings.API.Controllers;

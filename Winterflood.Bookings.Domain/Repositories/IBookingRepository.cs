@@ -1,6 +1,6 @@
 using Winterflood.Bookings.Domain.Models;
 
-namespace Winterflood.Bookings.Data.Repository.Interfaces;
+namespace Winterflood.Bookings.Domain.Repositories;
 
 public interface IBookingRepository
 {

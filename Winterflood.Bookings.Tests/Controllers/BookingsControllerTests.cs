@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Winterflood.Bookings.API.Controllers;
-using Winterflood.Bookings.API.Models.Requests;
-using Winterflood.Bookings.API.Services.Interfaces;
-using Winterflood.Bookings.Domain.Enum;
+using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Services.Interfaces;
+using Winterflood.Bookings.Domain.Enums;
 using Winterflood.Bookings.Domain.Models;
 using Xunit;
 

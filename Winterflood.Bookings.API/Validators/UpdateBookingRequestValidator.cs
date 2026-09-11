@@ -1,5 +1,5 @@
 using FluentValidation;
-using Winterflood.Bookings.API.Models.Requests;
+using Winterflood.Bookings.Application.Models.Requests;
 
 namespace Winterflood.Bookings.API.Validators;
 

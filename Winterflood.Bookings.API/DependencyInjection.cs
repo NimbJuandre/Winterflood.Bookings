@@ -2,8 +2,6 @@ using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using Winterflood.Bookings.API.Services.Implementation;
-using Winterflood.Bookings.API.Services.Interfaces;
 using Winterflood.Bookings.API.Validators;
 
 namespace Winterflood.Bookings.API;
@@ -20,7 +18,6 @@ public static class DependencyInjection
 
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
-        services.AddScoped<IBookingService, BookingService>();
 
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>

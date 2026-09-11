@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Winterflood.Bookings.Application\Winterflood.Bookings.Application.csproj" />
     <ProjectReference Include="..\Winterflood.Bookings.API\Winterflood.Bookings.API.csproj" />
     <ProjectReference Include="..\Winterflood.Bookings.Data\Winterflood.Bookings.Data.csproj" />
     <ProjectReference Include="..\Winterflood.Bookings.Domain\Winterflood.Bookings.Domain.csproj" />
