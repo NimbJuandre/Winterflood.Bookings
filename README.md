@@ -55,38 +55,38 @@ Winterflood.Bookings.Tests          Unit tests
 
 ## Features
 
-• FluentValidation – Request and cross-field validation.
-• Serilog – Structured console and request logging.
-• Swagger / OpenAPI – API documentation and testing.
-• Health checks – Basic health, readiness and liveness endpoints.
-• CORS – Environment-aware configuration through `Cors:AllowedOrigins`.
-• String enums – `BookingType` is represented as a readable string.
+- **FluentValidation** – Request and cross-field validation.
+- **Serilog** – Structured console and request logging.
+- **Swagger / OpenAPI** – API documentation and testing.
+- **Health checks** – Basic health, readiness and liveness endpoints.
+- **CORS** – Environment-aware configuration through `Cors:AllowedOrigins`.
+- **String enums** – `BookingType` is represented as a readable string.
 
 ## Testing
 
 The `docs/` folder contains:
 
-• `docs/Winterflood.Bookings.postman_collection.json` – CRUD and health check requests.
-• `docs/load-tests/get-booking.load.js` – k6 load test for the GET endpoint.
+- `docs/Winterflood.Bookings.postman_collection.json` – CRUD and health check requests.
+- `docs/load-tests/get-booking.load.js` – k6 load test for the GET endpoint.
 
 See `docs/README.md` for instructions.
 
 ### What would I do differently in a production system?
 
-• SQL database with migrations, proper indexing and backups.
-• EF Core / Dapper depending on the data-access requirements. EF Core would be the default, with Dapper for cases where direct SQL is justified.
-• Availability and concurrency control to prevent double-booking and handle simultaneous requests safely.
-• Redis for caching frequently accessed data where it provides a measurable benefit.
-• Authentication and authorisation using JWT/OAuth2 with role or policy-based access control where required.
-• Rate limiting and request limits to protect the API from abuse.
-• Idempotency for operations such as booking creation to safely handle client retries.
-• Observability with structured logging, metrics, distributed tracing and alerting.
-• Resilience around external dependencies, including timeouts, retries and circuit breakers where appropriate.
-• CI/CD with automated builds, tests, security checks and deployments.
-• Containerisation with Docker and appropriate runtime configuration.
-• Secrets management using a secure secret store rather than configuration files.
-• Integration and end-to-end tests covering the API, database and important booking scenarios.
-• Messaging for booking events and background processing where asynchronous work is appropriate.
-• API versioning and backwards compatibility as the API evolves.
+- SQL database with migrations, proper indexing and backups.
+- EF Core / Dapper depending on the data-access requirements. EF Core would be the default, with Dapper for cases where direct SQL is justified.
+- Availability and concurrency control to prevent double-booking and handle simultaneous requests safely.
+- Redis for caching frequently accessed data where it provides a measurable benefit.
+- Authentication and authorisation using JWT/OAuth2 with role or policy-based access control where required.
+- Rate limiting and request limits to protect the API from abuse.
+- Idempotency for operations such as booking creation to safely handle client retries.
+- Observability with structured logging, metrics, distributed tracing and alerting.
+- Resilience around external dependencies, including timeouts, retries and circuit breakers where appropriate.
+- CI/CD with automated builds, tests, security checks and deployments.
+- Containerisation with Docker and appropriate runtime configuration.
+- Secrets management using a secure secret store rather than configuration files.
+- Integration and end-to-end tests covering the API, database and important booking scenarios.
+- Messaging for booking events and background processing where asynchronous work is appropriate.
+- API versioning and backwards compatibility as the API evolves.
 
 
