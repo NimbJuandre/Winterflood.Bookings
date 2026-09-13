@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Winterflood.Bookings.API.Controllers;
 using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Models.Responses;
 using Winterflood.Bookings.Application.Services.Interfaces;
 using Winterflood.Bookings.Domain.Enums;
 using Winterflood.Bookings.Domain.Models;
@@ -43,7 +44,7 @@ public class BookingsControllerTests
     };
 
     [Fact]
-    public async Task Create_ReturnsCreatedAtAction_WithBooking()
+    public async Task Create_ReturnsCreatedAtAction_WithBookingResponse()
     {
         var request = ValidCreate();
         var created = BookingFrom(request);
@@ -56,7 +57,9 @@ public class BookingsControllerTests
 
         var createdAt = Assert.IsType<CreatedAtActionResult>(result.Result);
         Assert.Equal(nameof(BookingsController.GetById), createdAt.ActionName);
-        Assert.Equal(created.Id, Assert.IsType<Booking>(createdAt.Value).Id);
+        var response = Assert.IsType<BookingResponse>(createdAt.Value);
+        Assert.Equal(created.Id, response.Id);
+        Assert.Equal(created.CustomerName, response.CustomerName);
         Assert.Equal(201, createdAt.StatusCode);
     }
 
@@ -72,7 +75,8 @@ public class BookingsControllerTests
         var result = await controller.GetById(booking.Id, CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
-        Assert.Same(booking, ok.Value);
+        var response = Assert.IsType<BookingResponse>(ok.Value);
+        Assert.Equal(booking.Id, response.Id);
     }
 
     [Fact]
@@ -111,7 +115,9 @@ public class BookingsControllerTests
         var result = await controller.Update(id, request, CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(result.Result);
-        Assert.Same(updated, ok.Value);
+        var response = Assert.IsType<BookingResponse>(ok.Value);
+        Assert.Equal(id, response.Id);
+        Assert.Equal(request.CustomerName, response.CustomerName);
     }
 
     [Fact]

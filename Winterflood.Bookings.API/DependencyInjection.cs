@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using Winterflood.Bookings.API.Validators;
 
@@ -9,6 +10,17 @@ namespace Winterflood.Bookings.API;
 public static class DependencyInjection
 {
     public const string BookingsCorsPolicy = "BookingsCorsPolicy";
+
+    public static IHostBuilder AddSerilogLogging(this IHostBuilder host)
+    {
+        host.UseSerilog((context, services, config) => config
+            .ReadFrom.Configuration(context.Configuration)
+            .ReadFrom.Services(services)
+            .Enrich.FromLogContext()
+            .WriteTo.Console());
+
+        return host;
+    }
 
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
@@ -46,7 +58,6 @@ public static class DependencyInjection
                 }
                 else if (environment.IsDevelopment())
                 {
-                    // Dev convenience only; production must configure Cors:AllowedOrigins.
                     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
                 }
             });

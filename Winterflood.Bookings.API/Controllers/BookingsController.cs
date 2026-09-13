@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Winterflood.Bookings.Application.Mapping;
 using Winterflood.Bookings.Application.Models.Requests;
+using Winterflood.Bookings.Application.Models.Responses;
 using Winterflood.Bookings.Application.Services.Interfaces;
-using Winterflood.Bookings.Domain.Models;
 
 namespace Winterflood.Bookings.API.Controllers;
 
@@ -19,12 +20,13 @@ public sealed class BookingsController(IBookingService bookingService) : Control
     /// <response code="201">Booking was created successfully.</response>
     /// <response code="400">The request payload failed validation.</response>
     [HttpPost]
-    [ProducesResponseType(typeof(Booking), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(BookingResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<Booking>> Create([FromBody] CreateBookingRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<BookingResponse>> Create([FromBody] CreateBookingRequest request, CancellationToken cancellationToken)
     {
         var booking = await bookingService.CreateBookingAsync(request, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = booking.Id }, booking);
+        var response = booking.ToResponse();
+        return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
     }
 
     /// <summary>
@@ -36,12 +38,12 @@ public sealed class BookingsController(IBookingService bookingService) : Control
     /// <response code="200">Booking was found and returned.</response>
     /// <response code="404">No booking exists with the specified identifier.</response>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(Booking), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BookingResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Booking>> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult<BookingResponse>> GetById(Guid id, CancellationToken cancellationToken)
     {
         var booking = await bookingService.GetBookingAsync(id, cancellationToken);
-        return booking is null ? NotFound() : Ok(booking);
+        return booking is null ? NotFound() : Ok(booking.ToResponse());
     }
 
     /// <summary>
@@ -55,13 +57,13 @@ public sealed class BookingsController(IBookingService bookingService) : Control
     /// <response code="400">The request payload failed validation.</response>
     /// <response code="404">No booking exists with the specified identifier.</response>
     [HttpPut("{id:guid}")]
-    [ProducesResponseType(typeof(Booking), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(BookingResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Booking>> Update(Guid id, [FromBody] UpdateBookingRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<BookingResponse>> Update(Guid id, [FromBody] UpdateBookingRequest request, CancellationToken cancellationToken)
     {
         var updated = await bookingService.UpdateBookingAsync(id, request, cancellationToken);
-        return updated is null ? NotFound() : Ok(updated);
+        return updated is null ? NotFound() : Ok(updated.ToResponse());
     }
 
     /// <summary>

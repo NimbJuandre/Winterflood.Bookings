@@ -7,11 +7,7 @@ using Winterflood.Bookings.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, config) => config
-    .ReadFrom.Configuration(context.Configuration)
-    .ReadFrom.Services(services)
-    .Enrich.FromLogContext()
-    .WriteTo.Console());
+builder.Host.AddSerilogLogging();
 
 builder.Services
     .AddInfrastructure(builder.Configuration)

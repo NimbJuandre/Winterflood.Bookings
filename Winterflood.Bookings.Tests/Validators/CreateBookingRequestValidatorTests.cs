@@ -71,4 +71,15 @@ public class CreateBookingRequestValidatorTests
 
         _validator.TestValidate(req).ShouldHaveValidationErrorFor(x => x.EndDate);
     }
+
+    [Fact]
+    public void DefaultedBookingType_Fails()
+    {
+        // A request that omits BookingType binds to the enum default (0), which is
+        // deliberately not a defined member — this must be rejected.
+        var req = Valid();
+        req.BookingType = default;
+
+        _validator.TestValidate(req).ShouldHaveValidationErrorFor(x => x.BookingType);
+    }
 }

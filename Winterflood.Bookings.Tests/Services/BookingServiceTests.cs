@@ -113,4 +113,34 @@ public class BookingServiceTests
 
         Assert.False(await service.DeleteBookingAsync(Guid.NewGuid()));
     }
+
+    [Fact]
+    public async Task CreateBooking_TrimsCustomerNameAndItemName()
+    {
+        var service = CreateService();
+        var request = ValidCreate();
+        request.CustomerName = "  Alice  ";
+        request.ItemName = "  Seaside flat  ";
+
+        var booking = await service.CreateBookingAsync(request);
+
+        Assert.Equal("Alice", booking.CustomerName);
+        Assert.Equal("Seaside flat", booking.ItemName);
+    }
+
+    [Fact]
+    public async Task UpdateBooking_TrimsCustomerNameAndItemName()
+    {
+        var service = CreateService();
+        var created = await service.CreateBookingAsync(ValidCreate());
+        var update = ValidUpdate();
+        update.CustomerName = "  Alice B.  ";
+        update.ItemName = "  Mountain cabin  ";
+
+        var updated = await service.UpdateBookingAsync(created.Id, update);
+
+        Assert.NotNull(updated);
+        Assert.Equal("Alice B.", updated!.CustomerName);
+        Assert.Equal("Mountain cabin", updated.ItemName);
+    }
 }
