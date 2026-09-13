@@ -1,33 +1,20 @@
 # Winterflood Bookings API
 
-A small ASP.NET Core Web API (.NET 10) for creating, retrieving, updating and deleting
-bookings for holiday-related items (apartments, vehicles, shows, ...).
+A small ASP.NET Core Web API built with .NET 10 for creating, retrieving, updating and deleting bookings.
 
-Built as a technical assessment: the goal is a clean, well-structured, easy-to-explain
-solution rather than a fully productionised system.
-
-## What the application does
-
-Exposes a REST API that allows a caller to:
-
-- Create a booking
-- Retrieve a booking
-- Update a booking
-- Delete a booking
-
-Bookings are stored in memory. No database is used.
+The solution is intentionally kept simple and focused on the assessment requirements. Bookings are stored in memory and no database is required.
 
 ## Running
 
 ```bash
-cd Winterflood.Bookings
-dotnet run
+dotnet run --project Winterflood.Bookings.API
 ```
 
-Swagger UI is available (Development environment) at:
+Swagger is available in Development at:
 
-```
-https://localhost:{port}/swagger
+```text
+https://localhost:7298/swagger
+http://localhost:5249/swagger
 ```
 
 Run the tests:
@@ -36,116 +23,70 @@ Run the tests:
 dotnet test
 ```
 
-## API endpoints
+### Health checks
 
-| Method | Route                  | Description        | Success | Errors            |
-|--------|------------------------|--------------------|---------|-------------------|
-| POST   | `/api/bookings`        | Create a booking   | 201     | 400               |
-| GET    | `/api/bookings/{id}`   | Get a booking      | 200     | 404               |
-| PUT    | `/api/bookings/{id}`   | Update a booking   | 200     | 400, 404          |
-| DELETE | `/api/bookings/{id}`   | Delete a booking   | 204     | 404               |
+| Route           | Purpose        |
+| --------------- | -------------- |
+| `/health`       | Overall health |
+| `/health/ready` | Readiness      |
+| `/health/live`  | Liveness       |
 
-### Example: create a booking
+## API Endpoints
 
-```http
-POST /api/bookings
-Content-Type: application/json
+| Method | Route                | Description      | Success | Errors   |
+| ------ | -------------------- | ---------------- | ------- | -------- |
+| POST   | `/api/bookings`      | Create a booking | 201     | 400      |
+| GET    | `/api/bookings/{id}` | Get a booking    | 200     | 404      |
+| PUT    | `/api/bookings/{id}` | Update a booking | 200     | 400, 404 |
+| DELETE | `/api/bookings/{id}` | Delete a booking | 204     | 404      |
 
-{
-  "customerName": "Alice",
-  "bookingType": "Apartment",
-  "itemName": "Seaside flat",
-  "startDate": "2026-06-01",
-  "endDate": "2026-06-07",
-  "quantity": 1
-}
+## Solution Structure
+
+The solution is split into separate layers:
+
+```text
+Winterflood.Bookings.API            HTTP layer, controllers, middleware and configuration
+Winterflood.Bookings.Application    Services, DTOs and application logic
+Winterflood.Bookings.Domain         Domain entities and enums
+Winterflood.Bookings.Data           Repository abstraction and in-memory storage
+Winterflood.Bookings.Infrastructure External infrastructure concerns
+Winterflood.Bookings.Tests          Unit tests
 ```
 
-Response `201 Created` with `Location: /api/bookings/{id}` and the created booking body.
+## Features
 
-### Example: update a booking
+• FluentValidation – Request and cross-field validation.
+• Serilog – Structured console and request logging.
+• Swagger / OpenAPI – API documentation and testing.
+• Health checks – Basic health, readiness and liveness endpoints.
+• CORS – Environment-aware configuration through `Cors:AllowedOrigins`.
+• String enums – `BookingType` is represented as a readable string.
 
-```http
-PUT /api/bookings/{id}
-Content-Type: application/json
+## Testing
 
-{
-  "customerName": "Alice B.",
-  "bookingType": "Apartment",
-  "itemName": "Mountain cabin",
-  "startDate": "2026-07-01",
-  "endDate": "2026-07-05",
-  "quantity": 2
-}
-```
+The `docs/` folder contains:
 
-## Architecture
+• `docs/Winterflood.Bookings.postman_collection.json` – CRUD and health check requests.
+• `docs/load-tests/get-booking.load.js` – k6 load test for the GET endpoint.
 
-```
-Controllers  →  Services  →  Repository interface  →  In-memory repository
-```
+See `docs/README.md` for instructions.
 
-- **Controllers** – HTTP concerns only (routing, status codes, request binding).
-- **Services** – Business/application logic and cross-field validation.
-- **Repository** – Storage abstraction (`IBookingRepository`) with a
-  `ConcurrentDictionary`-backed in-memory implementation.
-- **DTOs** – Separate request models keep the API contract decoupled from the domain model.
-- **Middleware** – A small exception-handling middleware maps expected exceptions
-  (e.g. `ValidationException`) to RFC 7807 `ProblemDetails` responses and logs the rest.
+### What would I do differently in a production system?
 
-## Architecture Decisions
+• SQL database with migrations, proper indexing and backups.
+• EF Core / Dapper depending on the data-access requirements. EF Core would be the default, with Dapper for cases where direct SQL is justified.
+• Availability and concurrency control to prevent double-booking and handle simultaneous requests safely.
+• Redis for caching frequently accessed data where it provides a measurable benefit.
+• Authentication and authorisation using JWT/OAuth2 with role or policy-based access control where required.
+• Rate limiting and request limits to protect the API from abuse.
+• Idempotency for operations such as booking creation to safely handle client retries.
+• Observability with structured logging, metrics, distributed tracing and alerting.
+• Resilience around external dependencies, including timeouts, retries and circuit breakers where appropriate.
+• CI/CD with automated builds, tests, security checks and deployments.
+• Containerisation with Docker and appropriate runtime configuration.
+• Secrets management using a secure secret store rather than configuration files.
+• Integration and end-to-end tests covering the API, database and important booking scenarios.
+• Messaging for booking events and background processing where asynchronous work is appropriate.
+• API versioning and backwards compatibility as the API evolves.
 
-### No database
-The assessment explicitly states that persistence is not required, so a database would
-introduce unnecessary complexity.
 
-### Repository abstraction
-The repository is hidden behind `IBookingRepository`, so a persistent store (SQL, Mongo,
-etc.) could be swapped in later without touching the service or controller.
-
-### ConcurrentDictionary
-The API can receive concurrent HTTP requests. `ConcurrentDictionary<Guid, Booking>` gives
-thread-safe reads/writes without any explicit locking in the repository.
-
-### Service layer
-Business logic lives in `BookingService`, not the controller, so it is trivial to unit test
-and the controller stays focused on HTTP.
-
-### DTOs separate from the domain model
-`CreateBookingRequest` / `UpdateBookingRequest` are separate from `Booking`, so the
-public API contract is not tightly coupled to the internal representation. It also lets
-the domain model own its identity (`Id` is `init`-only) while requests remain free of it.
-
-### Validation via DataAnnotations
-For a small API, DataAnnotations plus a small amount of business validation in the service
-(`EndDate >= StartDate`) is enough. `[ApiController]` automatically returns
-`400 Bad Request` with a `ValidationProblemDetails` body when the model is invalid.
-FluentValidation would be justifiable on a larger project.
-
-### Global exception handling
-A single middleware translates known exceptions to `ProblemDetails` and logs unexpected
-ones, so controllers do not need repetitive `try/catch` blocks.
-
-### `Guid` ids
-Ids are generated server-side so clients cannot collide or forge them, and the client
-never needs to supply an id on create.
-
-## Production considerations (not implemented)
-
-If this were a real booking system I would additionally consider:
-
-- **Persistent database** (e.g. PostgreSQL) with EF Core or Dapper.
-- **Availability / capacity checking** – bookings would compete for real inventory.
-- **Concurrency control** – optimistic concurrency via a row version / ETag.
-- **AuthN / AuthZ** – JWT bearer auth, per-customer authorisation.
-- **Idempotency keys** on `POST` to protect against retries creating duplicates.
-- **Structured logging + metrics + distributed tracing** (Serilog, OpenTelemetry).
-- **Integration tests** using `WebApplicationFactory<Program>`.
-- **Distributed caching** for hot reads (e.g. Redis) once persisted.
-- **Booking confirmation events** published to a message broker for downstream systems.
-- **Message queues** for async work such as sending emails or reconciling inventory.
-- **Rate limiting** and input size limits at the edge.
-- **CI/CD** with automated build, test and container publish.
-
-None of these are needed for the assessment; they are listed to show awareness of what a
-real system would require.
